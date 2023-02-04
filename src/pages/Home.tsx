@@ -9,6 +9,7 @@ const Home:React.FC = () => {
     const [newUser,setNewUser]=useState<boolean>(false);
     const [edit,setEdit]=useState<boolean>(false);
     const [val,setVal]=useState<unknown>();
+    const [refresh,setRefresh]=useState<boolean>(false)
     useEffect(()=>{
         const fetchUsers=async()=>{
             const {data}=await getUsers();
@@ -19,15 +20,20 @@ const Home:React.FC = () => {
 
         }
         fetchUsers()
-    },[])
+    },[refresh])
     const handleDelete=async(id:any)=>{
         const response:any=await deleteUser(id);
         console.log(response.data.message);
-        toast.error(response.data.message)
+        toast.error(response.data.message);
+        setRefresh((pre:any)=>!pre)
     }
     const handleEdit=async(id:any)=>{
         setVal(id)
         setEdit((pre:any)=>!pre)
+    }
+    const handleBack=()=>{
+        setNewUser((pre:any)=>!pre)
+        setRefresh((pre:any)=>!pre)
     }
   return (
     <div>
@@ -36,7 +42,7 @@ const Home:React.FC = () => {
         {!newUser?
         <button className='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 my-2 mx-4 px-4 border border-blue-500 hover:border-transparent rounded'onClick={()=>setNewUser((pre:any)=>!pre)}>Add +</button>
         :
-        <button className='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 my-2 mx-4 px-4 border border-blue-500 hover:border-transparent rounded'onClick={()=>setNewUser((pre:any)=>!pre)}>Back</button>
+        <button className='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 my-2 mx-4 px-4 border border-blue-500 hover:border-transparent rounded'onClick={handleBack}>Back</button>
         
     }
         </div>
