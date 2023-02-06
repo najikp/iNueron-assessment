@@ -63,7 +63,7 @@ const Home:React.FC = () => {
         if (willDelete) {
           dispatch(deleteUser(id))
         } else {
-          swal("Your imaginary file is safe!");
+          swal("Everything is fine!");
         }
       });
     }
