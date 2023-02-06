@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { getUser, updateUser } from '../api/Requests'
+import { getUser } from '../api/Requests'
 import {toast} from 'react-hot-toast'
+import { useDispatch } from 'react-redux'
+import { updateUser } from '../actions/Action'
 
 interface prop{
     id:unknown
@@ -16,6 +18,7 @@ const UpdateUser:React.FC<prop> = ({id,setEdit}) => {
     }
     const [formData,setFormData]=useState<FormData>({firstName:'',lastName:'',phoneNumber:0,age:0});
     const [update,setUpate]=useState<boolean>(true);
+    const dispatch=useDispatch()
     
     useEffect(()=>{
         const fetchUser=async(id:any):Promise<void>=>{
@@ -33,13 +36,13 @@ const UpdateUser:React.FC<prop> = ({id,setEdit}) => {
 
       const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        // Do something with the form data
-        const editUser=async()=>{
-            const response:any=await updateUser(formData,id);
-            toast.success(response.data.message)
+        dispatch(updateUser(formData,id))
+        // const editUser=async()=>{
+        //     const response:any=await updateUser(formData,id);
+        //     toast.success(response.data.message)
             
-        }
-        editUser();
+        // }
+        // editUser();
 
       };
   return (

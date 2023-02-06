@@ -1,31 +1,71 @@
 import React, { useEffect, useState } from 'react'
-import { deleteUser, getUsers } from '../api/Requests'
+import {  getUser } from '../api/Requests'
 import AddUser from '../components/AddUser'
 import UpdateUser from '../components/UpdateUser'
 import {toast} from 'react-hot-toast'
+import {useDispatch,useSelector} from 'react-redux'
+import {deleteUser, getUsers} from '../actions/Action'
+import { AnyAction, Dispatch } from 'redux';
+import newReducer from '../reducers/newReducer'
+import swal from 'sweetalert'
+import { SweetAlert } from 'sweetalert/typings/core'
+const Users=typeof getUsers;
 
 const Home:React.FC = () => {
-    const [users,setUsers]=useState<Array<any>>([])
+    const dispatch=useDispatch()
+    // const [users,setUsers]=useState<Array<any>>([])
+    const {users}=useSelector((state:any)=>state.newReducer)
     const [newUser,setNewUser]=useState<boolean>(false);
     const [edit,setEdit]=useState<boolean>(false);
     const [val,setVal]=useState<unknown>();
     const [refresh,setRefresh]=useState<boolean>(false)
+    // useEffect(()=>{
+    //     const fetchUsers=async()=>{
+    //         const {data}=await getUsers();
+            
+    //         console.log(data)
+    //         setUsers(data.data)
+    //         console.log(users)
+
+
+    //     }
+    //     fetchUsers()
+    // },[refresh])
+
     useEffect(()=>{
-        const fetchUsers=async()=>{
-            const {data}=await getUsers();
-            console.log(data)
-            setUsers(data.data)
-            console.log(users)
-
-
-        }
-        fetchUsers()
+       dispatch(getUsers())
     },[refresh])
+    // const handleDelete=async(id:any)=>{
+    //     const response:any=await deleteUser(id);
+    //     console.log(response.data.message);
+    //     toast.error(response.data.message);
+    //     setRefresh((pre:any)=>!pre)
+    // }
+    interface sweetAlert{
+      title:string
+      text:string
+      icon:string
+      buttons:boolean
+      dangerMode:boolean
+    }
+    let details:sweetAlert={
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover Details!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }
+    const i:any=details;
+
     const handleDelete=async(id:any)=>{
-        const response:any=await deleteUser(id);
-        console.log(response.data.message);
-        toast.error(response.data.message);
-        setRefresh((pre:any)=>!pre)
+      swal(i)
+      .then((willDelete) => {
+        if (willDelete) {
+          dispatch(deleteUser(id))
+        } else {
+          swal("Your imaginary file is safe!");
+        }
+      });
     }
     const handleEdit=async(id:any)=>{
         setVal(id)

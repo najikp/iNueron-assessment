@@ -1,8 +1,7 @@
 import React,{useState} from 'react'
 import { createUser } from '../api/Requests';
 import {toast} from 'react-hot-toast'
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux/es/exports';
+
 
 interface prop{
     edit:boolean
@@ -23,7 +22,6 @@ const AddUser:React.FC<prop> = ({edit}) => {
 
       const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        // Do something with the form data
         const addUser=async()=>{
             const response:any=await createUser(formData);
             toast.success(response.data.message)
