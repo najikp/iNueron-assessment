@@ -7,6 +7,7 @@ import { updateUser } from '../actions/Action'
 interface prop{
     id:unknown
     setEdit:any
+    
 }
 
 const UpdateUser:React.FC<prop> = ({id,setEdit}) => {
@@ -36,7 +37,14 @@ const UpdateUser:React.FC<prop> = ({id,setEdit}) => {
 
       const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        dispatch(updateUser(formData,id))
+        if(formData.firstName.split('').length<=0||formData.lastName.split('').length<=0||formData.age.toString().split('').shift()=='0'||formData.phoneNumber.toString().split('').length!=10){
+          if(formData.phoneNumber.toString().split('').length!=10) toast.error('PhoneNumber is required and must be 10 digits')
+          if(formData.age.toString().split('').shift()=='0') toast.error('Age is required and must be greater than zero')
+          if(formData.lastName.split('').length<=0) toast.error('LastName is required')
+          if(formData.firstName.split('').length<=0) toast.error('FirstName is required')
+        }else{
+          dispatch(updateUser(formData,id));
+        }
         // const editUser=async()=>{
         //     const response:any=await updateUser(formData,id);
         //     toast.success(response.data.message)
@@ -48,13 +56,12 @@ const UpdateUser:React.FC<prop> = ({id,setEdit}) => {
   return (
     <div className="relative flex flex-col justify-center min-h-screen overflow-hidden ">
       <div className="w-full p-6 m-auto bg-white rounded-md shadow-xl shadow-rose-600/40 ring-2 ring-indigo-600 lg:max-w-xl">
-        <h1 className="text-3xl font-semibold text-center text-indigo-700 underline uppercase decoration-wavy">
+        <h1 className="text-3xl font-semibold text-center text-indigo-700  uppercase decoration-wavy">
           User Details
         </h1>
         <form className="mt-6" onSubmit={handleSubmit} >
           <div className="mb-2">
               <input
-              required
                 type="text"
                 disabled={update}
                 name="firstName"
@@ -79,7 +86,6 @@ const UpdateUser:React.FC<prop> = ({id,setEdit}) => {
             
               <input
                 type="text"
-                required
                 name="lastName"
                 disabled={update}
                 value={formData.lastName}
@@ -120,7 +126,6 @@ const UpdateUser:React.FC<prop> = ({id,setEdit}) => {
             focus:ring-opacity-50
           "
                 placeholder="Enter Mobile Number"
-                required
               />
           </div>
           <div className="mb-2">
@@ -144,7 +149,6 @@ const UpdateUser:React.FC<prop> = ({id,setEdit}) => {
             focus:ring-opacity-50
           "
                 placeholder="Enter Age"
-                required
               />
           </div>
 

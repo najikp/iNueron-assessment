@@ -23,8 +23,16 @@ const AddUser:React.FC<prop> = ({edit}) => {
       const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         const addUser=async()=>{
-            const response:any=await createUser(formData);
-            toast.success(response.data.message)
+            if(formData.firstName.split('').length<=0||formData.lastName.split('').length<=0||formData.age.toString().split('').shift()=='0'||formData.phoneNumber.toString().split('').length!=10){
+                if(formData.phoneNumber.toString().split('').length!=10) toast.error('PhoneNumber is required and must be 10 digits')
+                if(formData.age.toString().split('').shift()=='0') toast.error('Age is required and must be greater than zero')
+                if(formData.lastName.split('').length<=0) toast.error('LastName is required')
+                if(formData.firstName.split('').length<=0) toast.error('FirstName is required')
+                // toast.error('All fields are required!')
+            }else{
+                const response:any=await createUser(formData);
+                toast.success(response.data.message)
+            }
             
         }
         addUser();
@@ -33,13 +41,12 @@ const AddUser:React.FC<prop> = ({edit}) => {
   return (
     <div className="relative flex flex-col justify-center min-h-screen overflow-hidden ">
     {!edit&&<div className="w-full p-6 m-auto bg-white rounded-md shadow-xl shadow-rose-600/40 ring-2 ring-indigo-600 lg:max-w-xl">
-    <h1 className="text-3xl font-semibold text-center text-indigo-700 underline uppercase decoration-wavy">
+    <h1 className="text-3xl font-semibold text-center text-indigo-700  uppercase decoration-wavy">
         New User
     </h1>
     <form className="mt-6" onSubmit={handleSubmit}>
         <div className="mb-2">
             <input
-            required
             type="text"
             name="firstName"
             value={formData.firstName}
@@ -63,7 +70,6 @@ const AddUser:React.FC<prop> = ({edit}) => {
         
             <input
             type="text"
-            required
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
@@ -102,7 +108,7 @@ const AddUser:React.FC<prop> = ({edit}) => {
         focus:ring-opacity-50
         "
             placeholder="Enter Mobile Number"
-            required
+            
             />
         </div>
         <div className="mb-2">
@@ -125,7 +131,7 @@ const AddUser:React.FC<prop> = ({edit}) => {
         focus:ring-opacity-50
         "
             placeholder="Enter Age"
-            required
+            
             />
         </div>
 

@@ -86,7 +86,7 @@ const Home:React.FC = () => {
         
     }
         </div>
-    {edit?<UpdateUser id={val} setEdit={setEdit}/>:null}
+    {edit?<UpdateUser  id={val} setEdit={setEdit}/>:null}
         {!newUser&&!edit?
         <table className="table-auto w-full text-left">
   <thead>
